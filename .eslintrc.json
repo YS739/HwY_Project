@@ -9,8 +9,23 @@
     "es2022": true
   },
   "globals": { "_": true },
-  "plugins": ["import", "html"],
-  "extends": ["next/core-web-vitals", "airbnb-base", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "html",
+    "react",
+    "react-hooks",
+    "prettier"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
   "rules": {
     // "off" or 0 - turn the rule off
     // "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
@@ -40,6 +55,7 @@
         "allowTaggedTemplates": true
       }
     ],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }] // endOfLine이라는 에러 발생 시 운영체제 별로 설정된 값을 사용
   }
 }
