@@ -11,6 +11,9 @@ import {
   Container,
   Box,
   TextField,
+  AppBar,
+  Toolbar,
+  Typography,
 } from '@mui/material';
 
 // TODO:: 전체 코드 작성 후 component 분리
@@ -18,16 +21,18 @@ const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
 
-  // 언어 선택
+  // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
     e.preventDefault();
     setLanguage(e.target.value);
   };
 
+  // 학습 수준 선택
   const handleSelectLevel = (e: SelectChangeEvent<string>) => {
     e.preventDefault();
     setUserLevel(e.target.value);
   };
+
   return (
     <Container
       maxWidth="sm"
@@ -35,13 +40,28 @@ const Home = () => {
         border: '1px solid black',
       }}
     >
-      <Box sx={{ bgcolor: '#cfe8fc' }}>
-        <header>Language Learning with GPT</header>
+      {/* header */}
+      <AppBar position="static">
+        <Toolbar variant="dense">
+          <Typography variant="h6" color="inherit" component="header">
+            Language Learning with GPT
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
+      {/* Box => header 제외한 body에 해당하는 부분 */}
+      <Box sx={{ bgcolor: '#cfe8fc', padding: '0 20px' }}>
         {/* Language select */}
-        <div style={{ display: 'flex' }}>
-          <div>언어 선택</div>
-          <FormControl fullWidth sx={{ width: '50%' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            padding: '20px 0',
+          }}
+        >
+          <p style={{ width: '50%' }}>학습 언어 선택</p>
+          <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Language</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -56,16 +76,22 @@ const Home = () => {
                 },
               }}
             >
-              <MenuItem value="English">English</MenuItem>
-              <MenuItem value="Spanish">Spanish</MenuItem>
+              <MenuItem value="영어">영어</MenuItem>
+              <MenuItem value="스페인어">스페인어</MenuItem>
             </Select>
           </FormControl>
         </div>
-
         {/* Level select */}
-        <div style={{ display: 'flex' }}>
-          <div>학습 수준 선택</div>
-          <FormControl fullWidth sx={{ width: '50%' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            padding: '20px 0',
+          }}
+        >
+          <p style={{ width: '50%' }}>학습 수준 선택</p>
+          <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">UserLevel</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -88,12 +114,10 @@ const Home = () => {
         </div>
         {/* '오늘의 단어' 버튼 */}
         <Button variant="outlined">오늘의 단어</Button>
-
         {/* chatroom */}
         <Box sx={{ backgroundColor: 'lavender' }}>
           <div>안내 말풍선</div>
         </Box>
-
         {/* input form */}
         <Box
           // TODO: 속성 수정 필요
