@@ -18,11 +18,12 @@ import {
   Alert,
 } from '@mui/material';
 
-// TODO:: 전체 코드 작성 후 component 분리
 const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
   const [isLanguageSelected, setIsLanguageSelected] = useState(false);
+  // Open api secret key
+  const apiSecretKey = process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY;
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
@@ -36,6 +37,9 @@ const Home = () => {
     e.preventDefault();
     setUserLevel(e.target.value);
   };
+
+  // '오늘의 단어' 버튼 클릭 시 API 요청 및 응답 처리
+  const handleWordOfTheDay = async () => {};
 
   return (
     <>
@@ -121,7 +125,11 @@ const Home = () => {
             </FormControl>
           </div>
           {/* '오늘의 단어' 버튼 */}
-          <Button variant="contained" disabled={!isLanguageSelected}>
+          <Button
+            variant="contained"
+            disabled={!isLanguageSelected}
+            onClick={handleWordOfTheDay}
+          >
             오늘의 단어
           </Button>
           {/* 학습 언어 선택 경고 */}
