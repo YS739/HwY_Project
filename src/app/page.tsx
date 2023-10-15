@@ -15,17 +15,20 @@ import {
   Toolbar,
   Typography,
   CssBaseline,
+  Alert,
 } from '@mui/material';
 
 // TODO:: 전체 코드 작성 후 component 분리
 const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
+  const [isLanguageSelected, setIsLanguageSelected] = useState(false);
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
     e.preventDefault();
     setLanguage(e.target.value);
+    setIsLanguageSelected(true);
   };
 
   // 학습 수준 선택
@@ -42,6 +45,7 @@ const Home = () => {
         sx={{
           padding: '0',
           height: '100vh',
+          textAlign: 'center',
         }}
       >
         {/* header */}
@@ -60,11 +64,11 @@ const Home = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-around',
               padding: '20px 0',
             }}
           >
-            <p style={{ width: '50%' }}>학습 언어 선택</p>
+            <p style={{ width: '50%' }}>학습 언어</p>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Language</InputLabel>
               <Select
@@ -94,7 +98,7 @@ const Home = () => {
               padding: '20px 0',
             }}
           >
-            <p style={{ width: '50%' }}>학습 수준 선택</p>
+            <p style={{ width: '50%' }}>학습 수준</p>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">UserLevel</InputLabel>
               <Select
@@ -117,7 +121,20 @@ const Home = () => {
             </FormControl>
           </div>
           {/* '오늘의 단어' 버튼 */}
-          <Button variant="outlined">오늘의 단어</Button>
+          <Button variant="contained" disabled={!isLanguageSelected}>
+            오늘의 단어
+          </Button>
+          {/* 학습 언어 선택 경고 */}
+          {isLanguageSelected ? null : (
+            <Alert
+              variant="outlined"
+              severity="warning"
+              sx={{ width: '50%', height: '50px', border: 'none' }}
+            >
+              학습할 언어를 선택해주세요.
+            </Alert>
+          )}
+
           {/* chatroom */}
           <Box sx={{ backgroundColor: 'lavender' }}>
             <div>안내 말풍선</div>
