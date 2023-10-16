@@ -17,6 +17,7 @@ import {
   CssBaseline,
   Alert,
 } from '@mui/material';
+import WordTest from '@/components/WordTest';
 
 const Home = () => {
   const [language, setLanguage] = useState('');
@@ -60,6 +61,10 @@ const Home = () => {
             </Typography>
           </Toolbar>
         </AppBar>
+
+        {/* TODO:test 후 컴포넌트 삭제 */}
+        {/* api 연동 test */}
+        <WordTest />
 
         {/* Box => header 제외한 body에 해당하는 부분 */}
         <Box sx={{ bgcolor: '#cfe8fc', padding: '0 20px' }}>
