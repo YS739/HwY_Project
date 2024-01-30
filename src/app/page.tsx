@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import {
   FormControl,
@@ -16,15 +15,17 @@ import {
   Typography,
   CssBaseline,
   Alert,
+  Paper,
+  Chip,
 } from '@mui/material';
-import WordTest from '@/components/WordTest';
 
 const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
   const [isLanguageSelected, setIsLanguageSelected] = useState(false);
-  // Open api secret key
-  const apiSecretKey = process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY;
+
+  // api test
+  const [apiMessage, setApiMessage] = useState('');
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
@@ -40,7 +41,43 @@ const Home = () => {
   };
 
   // '오늘의 단어' 버튼 클릭 시 API 요청 및 응답 처리
-  const handleWordOfTheDay = async () => {};
+  const handleWordOfTheDay = async () => {
+    try {
+      // OpenAI 연동
+      const response = await fetch('/api/openAi', { method: 'POST' });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.error) {
+          console.error('API 요청 오류:', data.error);
+        } else {
+          console.log('Response status:', response.status);
+          console.log('Response message:', data.message);
+        }
+      } else {
+        console.log('API 요청 실패');
+      }
+    } catch (error) {
+      console.error('API 요청 오류:', error);
+    }
+  };
+
+  // api test
+  const handleApiTest = async () => {
+    try {
+      const response = await fetch('/api/testApi', { method: 'GET' });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Response status:', response.status);
+        console.log('Response message:', data.message);
+      } else {
+        console.log('API 요청 실패');
+      }
+    } catch (error) {
+      console.error('API 요청 오류:', error);
+    }
+  };
 
   return (
     <>
@@ -62,9 +99,9 @@ const Home = () => {
           </Toolbar>
         </AppBar>
 
-        {/* TODO:test 후 컴포넌트 삭제 */}
-        {/* api 연동 test */}
-        <WordTest />
+        {/* api Test button */}
+        <Button onClick={handleApiTest}>Api test</Button>
+        <p>{apiMessage}</p>
 
         {/* Box => header 제외한 body에 해당하는 부분 */}
         <Box sx={{ bgcolor: '#cfe8fc', padding: '0 20px' }}>
@@ -149,9 +186,27 @@ const Home = () => {
           )}
 
           {/* chatroom */}
-          <Box sx={{ backgroundColor: 'lavender' }}>
-            <div>안내 말풍선</div>
-          </Box>
+          <Paper
+            elevation={5}
+            sx={{ minHeight: '180px', backgroundColor: 'lightBlue' }}
+          >
+            {/* 말풍선 */}
+            <Chip
+              sx={{
+                height: 'auto',
+                margin: '10px',
+                padding: '3px',
+                fontSize: '14px',
+                backgroundColor: 'lightskyblue',
+                '& .MuiChip-label': {
+                  display: 'block',
+                  whiteSpace: 'normal',
+                },
+              }}
+              label="학습 언어를 선택 후 '오늘의 단어'를 눌러보세요."
+            />
+          </Paper>
+
           {/* input form */}
           <Box
             // TODO: 속성 수정 필요

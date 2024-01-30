@@ -1,21 +1,25 @@
+'use client';
+
 import { Button } from '@mui/material';
+// import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
+// const { Configuration, OpenAIApi } = require('openai');
 
 const WordTest = () => {
   // '오늘의 단어' 버튼 클릭 시 API 요청 및 응답 처리
   const handleWordOfTheDay = async () => {
-    try {
-      // API 엔드포인트 URL
-      const apiUrl = '/api/openAi';
-      const response = await fetch(apiUrl);
-      if (response.ok) {
-        const data = await response.json();
-        console.log('오늘의 단어:', data.result);
-      } else {
-        console.error('API 요청 오류:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('API 요청 오류:', error);
-    }
+    const openai = new OpenAI({
+      apiKey: process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY,
+    });
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: 'say hi' }],
+      temperature: 0,
+      max_tokens: 256,
+    });
+
+    console.log('gpt response:', response);
   };
 
   return (
