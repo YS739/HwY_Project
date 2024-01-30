@@ -23,9 +23,7 @@ const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
   const [isLanguageSelected, setIsLanguageSelected] = useState(false);
-
-  // api test
-  const [apiMessage, setApiMessage] = useState('');
+  const [words, serWords] = useState('');
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
@@ -40,39 +38,17 @@ const Home = () => {
     setUserLevel(e.target.value);
   };
 
-  // '오늘의 단어' 버튼 클릭 시 API 요청 및 응답 처리
+  // '오늘의 단어' 버튼 클릭 시 API 요청
   const handleWordOfTheDay = async () => {
     try {
-      // OpenAI 연동
       const response = await fetch('/api/openAi', { method: 'POST' });
 
       if (response.ok) {
         const data = await response.json();
-        if (data.error) {
-          console.error('API 요청 오류:', data.error);
-        } else {
-          console.log('Response status:', response.status);
-          console.log('Response message:', data.message);
-        }
-      } else {
-        console.log('API 요청 실패');
-      }
-    } catch (error) {
-      console.error('API 요청 오류:', error);
-    }
-  };
-
-  // api test
-  const handleApiTest = async () => {
-    try {
-      const response = await fetch('/api/testApi', { method: 'GET' });
-
-      if (response.ok) {
-        const data = await response.json();
         console.log('Response status:', response.status);
-        console.log('Response message:', data.message);
+        serWords(data.message);
       } else {
-        console.log('API 요청 실패');
+        console.log('API 요청 실패. 상태 코드:', response.status);
       }
     } catch (error) {
       console.error('API 요청 오류:', error);
@@ -98,10 +74,6 @@ const Home = () => {
             </Typography>
           </Toolbar>
         </AppBar>
-
-        {/* api Test button */}
-        <Button onClick={handleApiTest}>Api test</Button>
-        <p>{apiMessage}</p>
 
         {/* Box => header 제외한 body에 해당하는 부분 */}
         <Box sx={{ bgcolor: '#cfe8fc', padding: '0 20px' }}>
@@ -188,7 +160,12 @@ const Home = () => {
           {/* chatroom */}
           <Paper
             elevation={5}
-            sx={{ minHeight: '180px', backgroundColor: 'lightBlue' }}
+            sx={{
+              minHeight: '180px',
+              backgroundColor: 'lightBlue',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
           >
             {/* 말풍선 */}
             <Chip
@@ -205,6 +182,24 @@ const Home = () => {
               }}
               label="학습 언어를 선택 후 '오늘의 단어'를 눌러보세요."
             />
+
+            {/* ChatGPT 응답 출력 */}
+            {words ? (
+              <Chip
+                sx={{
+                  height: 'auto',
+                  margin: '10px',
+                  padding: '3px',
+                  fontSize: '14px',
+                  backgroundColor: 'lightskyblue',
+                  '& .MuiChip-label': {
+                    display: 'block',
+                    whiteSpace: 'normal',
+                  },
+                }}
+                label={words}
+              />
+            ) : null}
           </Paper>
 
           {/* input form */}
