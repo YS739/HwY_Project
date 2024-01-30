@@ -41,7 +41,16 @@ const Home = () => {
   // '오늘의 단어' 버튼 클릭 시 API 요청
   const handleWordOfTheDay = async () => {
     try {
-      const response = await fetch('/api/openAi', { method: 'POST' });
+      const response = await fetch('/api/openAi', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          language: language,
+          userLevel: userLevel,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
