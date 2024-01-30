@@ -156,7 +156,7 @@ const Home = () => {
             오늘의 단어
           </Button>
           {/* 학습 언어 선택 경고 */}
-          {isLanguageSelected ? null : (
+          {/* {isLanguageSelected ? null : (
             <Alert
               variant="outlined"
               severity="warning"
@@ -164,7 +164,7 @@ const Home = () => {
             >
               학습할 언어를 선택해주세요.
             </Alert>
-          )}
+          )} */}
 
           {/* chatroom */}
           <Paper
