@@ -71,7 +71,6 @@ const Home = () => {
         maxWidth="sm"
         sx={{
           padding: '0',
-          height: '100%',
           textAlign: 'center',
         }}
       >
@@ -85,7 +84,13 @@ const Home = () => {
         </AppBar>
 
         {/* Box => header 제외한 body에 해당하는 부분 */}
-        <Box sx={{ bgcolor: '#cfe8fc', padding: '0 20px' }}>
+        <Box
+          sx={{
+            bgcolor: '#cfe8fc',
+            padding: '0 20px',
+            minHeight: 'calc(100vh - 48px)',
+          }}
+        >
           {/* Language select */}
           <div
             style={{
@@ -152,7 +157,7 @@ const Home = () => {
             variant="contained"
             disabled={!isLanguageSelected}
             onClick={handleWordOfTheDay}
-            sx={{ marginBottom: '10px' }}
+            sx={{ margin: '10px 0' }}
           >
             오늘의 단어
           </Button>
@@ -172,11 +177,12 @@ const Home = () => {
             elevation={5}
             sx={{
               minHeight: '200px',
+              maxHeight: '250px',
               backgroundColor: 'lightBlue',
               display: 'flex',
               flexDirection: 'column',
               overflowY: 'auto',
-              maxHeight: '230px',
+              margin: '20px 0',
             }}
           >
             {/* ChatGPT 응답 출력 */}
