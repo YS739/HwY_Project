@@ -15,7 +15,7 @@ export const POST = async (req: NextRequest) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "user", content: `이전 단어와 중복되지 않는 ${userLevel} 수준의 ${language} 단어 3개를 '단어[IPA] - 한국어 뜻' 형식으로 알려줘` },
+          { role: "user", content: `이미 응답한 단어들을 고려하여 중복되지 않는 ${userLevel} 수준의 ${language} 단어 3개를 '단어[IPA] - 한국어 뜻' 형식으로 알려줘.` },
         ],
         temperature: 1,
         max_tokens: 200,
