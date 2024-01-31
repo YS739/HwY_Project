@@ -23,7 +23,7 @@ const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
   const [isLanguageSelected, setIsLanguageSelected] = useState(false);
-  const [words, serWords] = useState('');
+  const [words, serWords] = useState<string[]>([]);
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
@@ -55,7 +55,7 @@ const Home = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Response status:', response.status);
-        serWords(data.message);
+        serWords((prevResponses) => [...prevResponses, data.message]);
       } else {
         console.log('API 요청 실패. 상태 코드:', response.status);
       }
@@ -71,7 +71,7 @@ const Home = () => {
         maxWidth="sm"
         sx={{
           padding: '0',
-          height: '100vh',
+          height: '100%',
           textAlign: 'center',
         }}
       >
@@ -152,11 +152,12 @@ const Home = () => {
             variant="contained"
             disabled={!isLanguageSelected}
             onClick={handleWordOfTheDay}
+            sx={{ marginBottom: '10px' }}
           >
             오늘의 단어
           </Button>
           {/* 학습 언어 선택 경고 */}
-          {/* {isLanguageSelected ? null : (
+          {isLanguageSelected ? null : (
             <Alert
               variant="outlined"
               severity="warning"
@@ -164,55 +165,44 @@ const Home = () => {
             >
               학습할 언어를 선택해주세요.
             </Alert>
-          )} */}
+          )}
 
           {/* chatroom */}
           <Paper
             elevation={5}
             sx={{
-              minHeight: '180px',
+              minHeight: '200px',
               backgroundColor: 'lightBlue',
               display: 'flex',
               flexDirection: 'column',
+              overflowY: 'auto',
+              maxHeight: '230px',
             }}
           >
-            {/* 말풍선 */}
-            <Chip
-              sx={{
-                height: 'auto',
-                margin: '10px',
-                padding: '3px',
-                fontSize: '14px',
-                backgroundColor: 'lightskyblue',
-                '& .MuiChip-label': {
-                  display: 'block',
-                  whiteSpace: 'normal',
-                },
-              }}
-              label="학습 언어를 선택 후 '오늘의 단어'를 눌러보세요."
-            />
-
             {/* ChatGPT 응답 출력 */}
-            {words ? (
-              <Chip
-                sx={{
-                  height: 'auto',
-                  margin: '10px',
-                  padding: '3px',
-                  fontSize: '14px',
-                  backgroundColor: 'lightskyblue',
-                  '& .MuiChip-label': {
-                    display: 'block',
-                    whiteSpace: 'normal',
-                  },
-                }}
-                label={words}
-              />
-            ) : null}
+            {words.length === 0
+              ? null
+              : words.map((word, index) => (
+                  <Chip
+                    key={index}
+                    sx={{
+                      height: 'auto',
+                      margin: '10px',
+                      padding: '3px',
+                      fontSize: '14px',
+                      backgroundColor: 'lightskyblue',
+                      '& .MuiChip-label': {
+                        display: 'block',
+                        whiteSpace: 'normal',
+                      },
+                    }}
+                    label={word}
+                  />
+                ))}
           </Paper>
 
-          {/* input form */}
-          <Box
+          {/* 언어 번역 input form */}
+          {/* <Box
             // TODO: 속성 수정 필요
             component="form"
             sx={{ display: 'flex', '& > :not(style)': { m: 1, width: '25ch' } }}
@@ -221,7 +211,7 @@ const Home = () => {
           >
             <TextField id="standard-basic" variant="standard" />
             <Button>확인</Button>
-          </Box>
+          </Box> */}
         </Box>
       </Container>
     </>
