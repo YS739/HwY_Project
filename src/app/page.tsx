@@ -172,7 +172,8 @@ const Home = () => {
                 width: '100%',
                 height: '50px',
                 border: 'none',
-                paddingLeft: '16%',
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               학습할 언어를 선택해주세요.
