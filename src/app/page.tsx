@@ -152,6 +152,7 @@ const Home = () => {
               </Select>
             </FormControl>
           </div>
+
           {/* '오늘의 단어' 버튼 */}
           <Button
             variant="contained"
@@ -161,12 +162,18 @@ const Home = () => {
           >
             오늘의 단어
           </Button>
+
           {/* 학습 언어 선택 경고 */}
           {isLanguageSelected ? null : (
             <Alert
               variant="outlined"
               severity="warning"
-              sx={{ width: '50%', height: '50px', border: 'none' }}
+              sx={{
+                width: '100%',
+                height: '50px',
+                border: 'none',
+                paddingLeft: '16%',
+              }}
             >
               학습할 언어를 선택해주세요.
             </Alert>
