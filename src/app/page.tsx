@@ -1,29 +1,58 @@
 'use client';
-import { useState } from 'react';
 import {
+  Alert,
+  AppBar,
+  Box,
+  Button,
+  Chip,
+  Container,
+  CssBaseline,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Paper,
+  Select,
   SelectChangeEvent,
-  Button,
-  Container,
-  Box,
-  TextField,
-  AppBar,
   Toolbar,
   Typography,
-  CssBaseline,
-  Alert,
-  Paper,
-  Chip,
 } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Home = () => {
   const [language, setLanguage] = useState('');
   const [userLevel, setUserLevel] = useState('초급');
   const [isLanguageSelected, setIsLanguageSelected] = useState(false);
   const [words, serWords] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // 로딩중 표시
+  const [progress, setProgress] = useState(0);
+  const [buffer, setBuffer] = useState(10);
+  const progressRef = useRef(() => {});
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   // 학습 언어 선택
   const handleSelectLanguage = (e: SelectChangeEvent<string>) => {
@@ -41,6 +70,8 @@ const Home = () => {
   // '오늘의 단어' 버튼 클릭 시 API 요청
   const handleWordOfTheDay = async () => {
     try {
+      setLoading(true);
+
       const response = await fetch('/api/openAi', {
         method: 'POST',
         headers: {
@@ -61,6 +92,8 @@ const Home = () => {
       }
     } catch (error) {
       console.error('API 요청 오류:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -156,7 +189,7 @@ const Home = () => {
           {/* '오늘의 단어' 버튼 */}
           <Button
             variant="contained"
-            disabled={!isLanguageSelected}
+            disabled={!isLanguageSelected || loading}
             onClick={handleWordOfTheDay}
             sx={{ margin: '10px 0' }}
           >
@@ -194,25 +227,43 @@ const Home = () => {
             }}
           >
             {/* ChatGPT 응답 출력 */}
-            {words.length === 0
-              ? null
-              : words.map((word, index) => (
-                  <Chip
-                    key={index}
-                    sx={{
-                      height: 'auto',
-                      margin: '10px',
-                      padding: '3px',
-                      fontSize: '14px',
-                      backgroundColor: 'lightskyblue',
-                      '& .MuiChip-label': {
-                        display: 'block',
-                        whiteSpace: 'normal',
-                      },
-                    }}
-                    label={word}
-                  />
-                ))}
+            {loading && words.length === 0 ? (
+              <LinearProgress
+                variant="buffer"
+                value={progress}
+                valueBuffer={buffer}
+                sx={{ margin: '20px 0' }}
+              />
+            ) : (
+              words.map((word, index) => (
+                <div key={index}>
+                  {/* FIXME: 마지막 응답 말풍선에 로딩 표시가 생김 */}
+                  {loading && index === words.length - 1 ? (
+                    <LinearProgress
+                      variant="buffer"
+                      value={progress}
+                      valueBuffer={buffer}
+                      sx={{ margin: '20px 0' }}
+                    />
+                  ) : (
+                    <Chip
+                      sx={{
+                        height: 'auto',
+                        margin: '10px',
+                        padding: '3px',
+                        fontSize: '14px',
+                        backgroundColor: 'lightskyblue',
+                        '& .MuiChip-label': {
+                          display: 'block',
+                          whiteSpace: 'normal',
+                        },
+                      }}
+                      label={word}
+                    />
+                  )}
+                </div>
+              ))
+            )}
           </Paper>
 
           {/* 언어 번역 input form */}
